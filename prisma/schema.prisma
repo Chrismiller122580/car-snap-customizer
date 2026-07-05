@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id        String   @id @default(cuid())
+  auth0Id   String   @unique
+  email     String
+  vehicles  Vehicle[]
+  builds    UserBuild[]
+}
+
+model Vehicle {
+  id          String   @id @default(cuid())
+  accountId   String
+  photoUrl    String
+  make        String
+  model       String
+  year        Int
+  config      Json?
+}
+
+model Product {
+  id          String @id @default(cuid())
+  name        String
+  category    String // exterior, interior, wheels
+  previewUrl  String
+  price       Float
+  data        Json   // e.g. {color: '#ff0000', gltf: '...'}
+}
+
+model UserBuild {
+  id        String @id @default(cuid())
+  accountId String
+  name      String
+  mods      Json
+  preview   String?
+}
